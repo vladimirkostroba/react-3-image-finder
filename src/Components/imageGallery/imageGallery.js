@@ -2,7 +2,7 @@ import React from "react";
 // import "./imageGallery.css"
 import ImageItem from "../imageItem/imageItem";
 
-const ImageGallery = ({images}) => {
+const ImageGallery = ({images,onOpenModal}) => {
      return(
         <ul className="ImageGallery">
             {images.map(({id,webformatURL,largeImageURL}) => (
@@ -10,6 +10,7 @@ const ImageGallery = ({images}) => {
                 key={id}
                 webformatURL={webformatURL}
                 largeImageURL={largeImageURL}
+                onOpenModal={onOpenModal}
                 />
             )
                 )}

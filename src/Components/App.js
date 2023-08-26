@@ -1,7 +1,7 @@
 import React,{Component, Fragment} from 'react'
 import Searchbar from './Searchbar/Searchbar'
 import ImageGallery from './imageGallery/imageGallery'
-import { Audio } from  'react-loader-spinner'
+import Modal from './Modal/Modal'
 
 import imagesApi from '../servises/imagesApi'
 
@@ -13,19 +13,20 @@ export default class App extends Component {
         searchQuery:'',
         loading:false,
         error:null,
+        largeImgUrl:null
 
     }
 
     // ДОБАВЛЕНИЕ ОБЪЕКТОВ В STATE.IMAGES
 
-    // componentDidUpdate(prevProps,prevState){
-    //     const prevQuery = prevState.searchQuery;
-    //     const nextQuery = this.state.searchQuery;
+    componentDidUpdate(prevProps,prevState){
+        const prevQuery = prevState.searchQuery;
+        const nextQuery = this.state.searchQuery;
 
-    //     if(prevQuery !== nextQuery){
-    //         this.getImages();
-    //     }
-    // }
+        if(prevQuery !== nextQuery){
+            this.getImages();
+        }
+    }
 
     getImages = () => {
         const{page,searchQuery} = this.state;
@@ -55,23 +56,33 @@ export default class App extends Component {
         this.getImages();
     }
 
-    // ДОЗАГРУЗКА КАРТИНОК ПРИ КЛИКЕ ПО КНОПКЕ
+    // Открытие модалки
+
+    openModal = (url) => {
+        this.setState({largeImgUrl:url})
+
+        
+    }
 
 
 
 
 
     render(){
-        const{images,loading} = this.state;
+        const{images,loading,largeImgUrl} = this.state;
 
         return(
             <Fragment>
                 <Searchbar onSubmit={this.handleFormSubmit}/>
                 {images.length > 0 && 
-                <ImageGallery images={images}/>}
-                {images.length > 0 && !loading && 
+                <ImageGallery images={images} onOpenModal={this.openModal}/>}
+                {images.length > 0 && 
                 <button type='button' className='Button' 
-                onClick={this.getImages}>Load more</button>}
+                onClick={this.getImages}>{loading ? 'Loading ...' : 'Load more'}</button>}
+                {largeImgUrl && 
+                <Modal largeImgUrl={largeImgUrl}/>}
+
+
               
             </Fragment>
         )
