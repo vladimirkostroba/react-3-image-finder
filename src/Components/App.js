@@ -13,7 +13,8 @@ export default class App extends Component {
         searchQuery:'',
         loading:false,
         error:null,
-        largeImgUrl:null
+        openModal:false,
+        largeImgUrl:null,
 
     }
 
@@ -44,6 +45,8 @@ export default class App extends Component {
         )
         .catch(error => this.setState({error}))
         .finally(() => this.setState({loading:false}));
+
+
     }
 
     // ПОЛУУЧЕНИЕ ЗАПРОСА ИЗ ФОРМЫ
@@ -58,18 +61,28 @@ export default class App extends Component {
 
     // Открытие модалки
 
-    openModal = (url) => {
-        this.setState({largeImgUrl:url})
-
-        
+    
+    openModal =(url)=> {
+        this.setState({
+            openModal: true,
+            largeImgUrl:url
+        })
     }
 
+    closeModal =()=>{
+        this.setState({
+            openModal: false,
+            largeImgUrl:''
+        })
+    }
+
+    // scroll
 
 
 
 
     render(){
-        const{images,loading,largeImgUrl} = this.state;
+        const{images,loading,openModal,largeImgUrl} = this.state;
 
         return(
             <Fragment>
@@ -78,12 +91,11 @@ export default class App extends Component {
                 <ImageGallery images={images} onOpenModal={this.openModal}/>}
                 {images.length > 0 && 
                 <button type='button' className='Button' 
-                onClick={this.getImages}>{loading ? 'Loading ...' : 'Load more'}</button>}
-                {largeImgUrl && 
-                <Modal largeImgUrl={largeImgUrl}/>}
-
-
-              
+                onClick={this.getImages}>{loading ? '...' : 'Load more'}</button>}
+                {openModal && 
+                <Modal onClose={this.closeModal}>
+                    <img src={largeImgUrl} alt='#'/>
+                </Modal>} 
             </Fragment>
         )
     }

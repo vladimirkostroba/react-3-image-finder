@@ -5,9 +5,9 @@ const ImageItem = ({webformatURL,largeImageURL,onOpenModal}) => {
     return(
         <li className="ImageItem">
             <img className="ImageItem-image" src={webformatURL} 
-            datatype={largeImageURL} 
+            data-largeurl={largeImageURL} 
             alt="" 
-            onClick={(e) => onOpenModal(largeImageURL)}/>
+            onClick={e => onOpenModal(e.target.dataset.largeurl)}/>
         </li>
     )
 }
